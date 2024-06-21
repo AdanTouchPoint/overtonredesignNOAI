@@ -6,7 +6,7 @@ import Button from "react-bootstrap/cjs/Button";
 import Alert from "react-bootstrap/Alert";
 import List from "./List";
 import ListSelect from "./ListSelect";
-import AIPrompt from "./AIPrompt";
+import ManualEmailForm from "./ManualEmailForm";
 import EmailForm from "./EmailForm";
 import ThankYou from "./ThankYou";
 import { Link, animateScroll as scroll } from "react-scroll";
@@ -32,16 +32,12 @@ const MainForm = ({
   backendURLBaseServices,
   senator,
   setSenator,
-  setDataQuestions,
-  dataQuestions,
-  questions,
-  setQuestions,
-  configurations,
   allDataIn,
   setAllDataIn,
   colors,
   formFields,
 }) => {
+  const [showManualEmailForm, setShowManualEmailForm] = useState(true)
   const [showLoadSpin, setShowLoadSpin] = useState(false);
   const [showList, setShowList] = useState(true);
   const [showFindForm, setShowFindForm] = useState(false);
@@ -50,17 +46,14 @@ const MainForm = ({
   const [error, setError] = useState(false);
   const [showThankYou, setShowThankYou] = useState(true);
   const [tac, setTac] = useState(false);
-  // const { formFields } = mainData;
   const [showListSelect,setShowListSelect] = useState(true)
   const [emails,setEmails]= useState()
   const [many, setMany] =  useState(false)
   const [showMainContainer, setShowMainContainer] = useState(false)
-
   const loading = (cl) => {
     scroll.scrollTo(1000);
     return <LoadingMainForm cl={cl} />;
   };
-
   const handleTerms = (e) => {
     if (e.target.checked === true) {
       setTac(true);
@@ -68,7 +61,7 @@ const MainForm = ({
       setTac(false);
     }
   };
-const selectAll = (e) => {
+  const selectAll = (e) => {
   fetchLeads(
     true,
     backendURLBase,
@@ -80,16 +73,14 @@ const selectAll = (e) => {
     'checkbox-list-email-preference-lead'
   );
   setMany(true)
-setEmails([
+  setEmails([
   ...mp,
   ...senator
-]
-
-)
-e.preventDefault()
-setShowListSelect(false)
-setShowList(true)
-}
+  ])
+  e.preventDefault()
+  setShowListSelect(false)
+  setShowList(true)
+  }
   const handleChange = (e) => {
     e.preventDefault();
     setDataUser({
@@ -104,7 +95,6 @@ setShowList(true)
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     return emailRegex.test(email.trim());
   };
-  
   const back = (e) => {
     e.preventDefault;
     setShowFindForm(false)
@@ -113,78 +103,29 @@ setShowList(true)
   const click = async (e) => {
     e.preventDefault();
     console.log(dataUser, 'dataUser')
-    // const form = e.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    // }
     if (!isValidEmail(dataUser.emailUser) || tac === false ||  Object.getOwnPropertyNames(dataUser).length === 0 || dataUser.userName === undefined  || dataUser.emailUser === undefined  ) {
       setError(true);
-      // console.log('Field validator', fieldValidator())
       return;
     }
-    console.log(validated, 'validated')
     setValidated(true);
     setShowLoadSpin(true);
     setError(false);
-
-    if (configurations.SearchBy === "postcode") {
-      fetchRepresentatives(
-        "GET",
-        backendURLBase,
-        endpoints.toGetRepresentativesByCp,
-        clientId,
-        `&postcode=${dataUser.postalCode}`,
-        setMp,
-        setSenator,
-        setShowLoadSpin,
-        setShowList,
-        setShowListSelect,
-        setShowFindForm
-      ).catch((error) => console.log("error", error));
-      scroll.scrollToBottom();
-      if (!mainData) return "loading datos";
-      if (!mp) return "loading datos";
-    }
-
-    if (configurations.SearchBy === "state") {
-      fetchRepresentatives(
-        "GET",
-        backendURLBase,
-        endpoints.toGetRepresentativesPerStates,
-        clientId,
-        `&state=${dataUser.state}`,
-        setMp,
-        setShowLoadSpin,
-        setShowList,
-        mp,
-        setSenator,
-        senator,
-        configurations.sendMany,
-        setAllDataIn
-      ).catch((error) => console.log("error", error));
-      scroll.scrollTo(1000);
-      if (!mainData) return "loading datos";
-      if (!mp) return "loading datos";
-    }
-    if (configurations.searchBy === "party") {
-      fetchRepresentatives(
-        "GET",
-        backendURLBase,
-        endpoints.toGetRepresentativesPerParty,
-        clientId,
-        `&party=${dataUser.party}`,
-        setMp,
-        setShowLoadSpin,
-        setShowList,
-        mp,
-        setSenator,
-        senator
-      ).catch((error) => console.log("error", error));
-      scroll.scrollTo(1000);
-      if (!mainData) return "loading datos";
-      if (!mp) return "loading datos";
-    }
+    fetchRepresentatives(
+      "GET",
+      backendURLBase,
+      endpoints.toGetRepresentativesByCp,
+      clientId,
+      `&postcode=${dataUser.postalCode}`,
+      setMp,
+      setSenator,
+      setShowLoadSpin,
+      setShowList,
+      setShowListSelect,
+      setShowFindForm
+    ).catch((error) => console.log("error", error));
+    scroll.scrollToBottom();
+    if (!mainData) return "loading datos";
+    if (!mp) return "loading datos";
     fetchLeads(
       true,
       backendURLBase,
@@ -195,7 +136,6 @@ setShowList(true)
       'NA',
       'basic-data-user'
     );
-    setLeads(leads + 1)
   };
   if (!mainData) return "loading datos";
   if (!mp) return "loading datos";
@@ -329,32 +269,26 @@ setShowList(true)
               <p>{mainData.note}</p>
             </div>
             <div className="list-container">
-
             <h5 className="representative-position">Senators</h5>
             <div className="representatives-container">
               { senator && senator.length > 0 ? (
                 senator.map((mps, index) => (
                   <List
                   setMany={setMany}
-                  leads={leads}
-                  setLeads={setLeads}
-                    setHideIAPrompt={setHideIAPrompt}
-                    setShowFindForm={setShowFindForm}
-                    showFindForm={showFindForm}
-                    mainData={mainData}
-                    emailData={emailData}
-                    setEmailData={setEmailData}
-                    dataUser={dataUser}
-                    mps={mps}
-                    clientId={clientId}
-                    key={index}
-                    tweet={tweet}
-                    setShowList={setShowList}
-                    showMainContainer={showMainContainer}
+                  setShowFindForm={setShowFindForm}
+                  emailData={emailData}
+                  setEmailData={setEmailData}
+                  dataUser={dataUser}
+                  mps={mps}
+                  clientId={clientId}
+                  key={index}
+                  tweet={tweet}
+                  setShowList={setShowList}
                   setShowMainContainer={setShowMainContainer}
                   colors={colors}
                   backendURLBase={backendURLBase}
                   endpoints={endpoints}
+                  setShowManualEmailForm={setShowManualEmailForm}
                   />
                 ))
               ) : (
@@ -364,38 +298,28 @@ setShowList(true)
                 </Alert>
               )}
             </div>
-
-
             </div>
-
             <div className="list-container">
-
             <h5 className="representative-position">MP`S</h5>
             <div className="representatives-container">
               {mp && mp.length > 0 ? (
                 mp.map((mps, index) => (
                   <List
                   setMany={setMany}
-                  leads={leads}
-                  setLeads={setLeads}
-                  setShowList={setShowList}
-                  setHideIAPrompt={setHideIAPrompt}
                   setShowFindForm={setShowFindForm}
-                  showFindForm={showFindForm}
                   emailData={emailData}
                   setEmailData={setEmailData}
                   dataUser={dataUser}
-                  mainData={mainData}
                   mps={mps}
                   clientId={clientId}
                   key={index}
                   tweet={tweet}
-                  showMainContainer={showMainContainer}
+                  setShowList={setShowList}
                   setShowMainContainer={setShowMainContainer}
                   colors={colors}
                   backendURLBase={backendURLBase}
                   endpoints={endpoints}
-
+                  setShowManualEmailForm={setShowManualEmailForm}
                   />
                 ))
               ) : (
@@ -405,15 +329,13 @@ setShowList(true)
                 </Alert>
               )}
             </div>
-
             </div>
             <Button className="back-button" onClick={back}>Back</Button>
           </div>
           <div className={"container senators-container"} hidden={showListSelect}>
-          
             <h2 className="main-texts-color instruction-text">Select all representatives
-you’d like to email</h2>
-          
+                you’d like to email
+            </h2>
             <div className="representatives-container">
               {mp.length > 0 ? (
                 <ListSelect
@@ -431,7 +353,6 @@ you’d like to email</h2>
                   dataUser={dataUser}
                   mp={mp}
                   clientId={clientId}
-                  // key={index}
                   tweet={tweet}
                   allDataIn={allDataIn}
                   setAllDataIn={setAllDataIn}
@@ -439,7 +360,6 @@ you’d like to email</h2>
                   setShowMainContainer={setShowMainContainer}
                   backendURLBase={backendURLBase}
                   endpoints={endpoints}
-                  
                 />
               ) : (
                 <Alert variant="danger">
@@ -448,41 +368,27 @@ you’d like to email</h2>
                 </Alert>
               )}
             </div>
-
-          
           </div>
         </div>
-      
-      
     </div>
-    <AIPrompt
-      many={many}
-      setMany={setMany}
-      setShowList={setShowList}
-      setLeads={setLeads}
-      leads={leads}
-      setShowThankYou={setShowThankYou}
-      setShowFindForm={setShowFindForm}
-      setHideIAPrompt={setHideIAPrompt}
-      hideIAPrompt={hideIAPrompt}
-      dataUser={dataUser}
-      emailData={emailData}
-      setEmailData={setEmailData}
-      setDataUser={setDataUser}
-      clientId={clientId}
-      endpoints={endpoints}
-      backendURLBase={backendURLBase}
-      backendURLBaseServices={backendURLBaseServices}
-      mainData={mainData}
-      questions={questions}
-      setQuestions={setQuestions}
-      setDataQuestions={setDataQuestions}
-      dataQuestions={dataQuestions}
-      allDataIn={allDataIn}
-      setAllDataIn={setAllDataIn}
-      configurations={configurations}
-      setShowMainContainer={setShowMainContainer}
-        
+    <ManualEmailForm
+        many={many}
+        setShowList={setShowList}
+        setShowThankYou={setShowThankYou}
+        setShowFindForm={setShowFindForm}
+        dataUser={dataUser}
+        emailData={emailData}
+        setEmailData={setEmailData}
+        setDataUser={setDataUser}
+        clientId={clientId}
+        endpoints={endpoints}
+        backendURLBase={backendURLBase}
+        backendURLBaseServices={backendURLBaseServices}
+        mainData={mainData}
+        allDataIn={allDataIn}
+        setShowMainContainer={setShowMainContainer}
+        showManualEmailForm={showManualEmailForm}
+        setShowManualEmailForm={setShowManualEmailForm}
       />
       <ThankYou
         emailData={emailData}

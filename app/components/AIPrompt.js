@@ -203,7 +203,6 @@ const AIPrompt = ({
         questions={questions}
         allDataIn={allDataIn}
         setAllDataIn={setAllDataIn}
-        
         setShowMainContainer={setShowMainContainer}
         showManualEmailForm={showManualEmailForm}
         setShowManualEmailForm={setShowManualEmailForm}

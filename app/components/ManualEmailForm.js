@@ -10,26 +10,17 @@ import { animateScroll as scroll } from "react-scroll";
 import LoadingMainForm from "./LoadingMainForm";
 
 const ManualEmailForm = ({
-  leads,
-  setLeads,
-  questions,
   setShowThankYou,
   setShowFindForm,
   dataUser,
   setDataUser,
-  hideIAPrompt,
-  setHideIAPrompt,
   emailData,
-  setEmailData,
   clientId,
   backendURLBase,
   endpoints,
   backendURLBaseServices,
   mainData,
   setShowList,
-  allDataIn,
-  setMany,
-  many,
   setShowMainContainer,
   showManualEmailForm,
   setShowManualEmailForm,
@@ -38,22 +29,6 @@ const ManualEmailForm = ({
   const [showEmailPreview, setShowEmailPreview] = useState(true);
   const [valid, setValid] = useState(false);
   const [error, setError] = useState(false);
-  const [showLoadSpin, setShowLoadSpin] = useState(false);
-
-  const [emailMessage, setEmailMessage] = useState({});
-  const [continueBtn, setcontinueBtn] = useState(true);
-  
-  
-  // const handleMessageChange = (e) => {
-  //   e.preventDefault();
-  //   setDataUser({ ...emailData, [e.target.name]: e.target.value });
-  //   console.log(dataUser.message, 'datauser')
-  // };
-  // const handleSubjectChange = (e) =>{
-  //   e.preventDefault();
-  //   setDataUser({ ...dataUser, [e.target.name]: e.target.value });
-  //   console.log(dataUser.subject, 'datauser')
-  // }
   const handleMessageChange = (e) => {
     e.preventDefault();
     setDataUser({
@@ -61,70 +36,11 @@ const ManualEmailForm = ({
       subject: e.target.name === "subject" ? e.target.value : dataUser.subject,
       message: e.target.name === "message" ? e.target.value : dataUser.message,
     });
-    
-    // console.log(dataUser);
   };
   const handleSend = async (e) => {
     e.preventDefault();
-    let currentSubject = dataUser.message;
-    // console.log(currentSubject)
-    if (many === true) {
-      // console.log(allDataIn);
-      const payload = await fetchData(
-        "GET",
-        backendURLBaseServices,
-        endpoints.toSendBatchEmails,
-        clientId,
-        `to=${allDataIn}&subject=${currentSubject}&firstName=${
-          dataUser.userName
-        }&emailData=${
-          dataUser.emailUser
-        }&text=${dataUser.message.replace(/\n\r?/g, "<br/>")}`
-      );
-      const messageEmail = dataUser.message.replace(/\n\r?/g, "<br/>")
-      if (payload.success === true) {
-        fetchLeads(
-          true,
-          backendURLBase,
-          endpoints,
-          clientId,
-          dataUser,
-          emailData,
-          messageEmail,
-          'message-multiple-representatives-lead'
-        );
-        setShowManualEmailForm(true);
-        setShowFindForm(true);
-        setShowEmailPreview(true);
-        setShowThankYou(false);
-        setLeads(leads + 1);
-      }
-      if (payload.success !== true) {
-        fetchLeads(
-          false,
-          backendURLBase,
-          endpoints,
-          clientId,
-          dataUser,
-          emailData,
-          messageEmail,
-          'message-multiple-representatives-not-sended-lead'
-        );
-        return (
-          <Alert>
-            The mail has not been sended succesfully, please try again later.
-            <Button
-              className={"button-email-form"}
-              variant={"dark"}
-              onClick={back}
-            >
-             Back
-            </Button>
-          </Alert>
-        );
-      }
-      return;
-    }
+    let currentSubject = dataUser.subject;
+    console.log(currentSubject)
     // console.log(dataUser.subject, 'datauser subject')
     const payload = await fetchData(
       "GET",
@@ -151,9 +67,7 @@ const ManualEmailForm = ({
       );
       setShowManualEmailForm(true);
       setShowFindForm(true);
-      setShowEmailPreview(true);
       setShowThankYou(false);
-      setLeads(leads + 1);
     }
     if (payload.success !== true) {
       fetchLeads(
@@ -265,7 +179,6 @@ const ManualEmailForm = ({
                   <Button
                     onClick={handleSend}
                     className={"button-email-form secundary-btn"}
-                    
                   >
                     Send!
                   </Button>
