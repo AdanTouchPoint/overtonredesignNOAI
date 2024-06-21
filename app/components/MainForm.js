@@ -14,8 +14,6 @@ import { fetchRepresentatives } from "../assets/petitions/fetchRepresentatives";
 import { fetchLeads } from "../assets/petitions/fetchLeads";
 import LoadingMainForm from "./LoadingMainForm";
 const MainForm = ({
-  leads,
-  setLeads,
   dataUser,
   setDataUser,
   mp,
@@ -340,8 +338,6 @@ const MainForm = ({
               {mp.length > 0 ? (
                 <ListSelect
                   setEmails={setEmails}
-                  leads={leads}
-                  setLeads={setLeads}
                   emails={emails}
                   setShowList={setShowList}
                   setShowListSelect={setShowListSelect}
