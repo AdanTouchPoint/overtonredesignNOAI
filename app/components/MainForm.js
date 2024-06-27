@@ -1,15 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Loader from "react-loader-spinner";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/cjs/Button";
 import Alert from "react-bootstrap/Alert";
 import List from "./List";
 import ListSelect from "./ListSelect";
 import ManualEmailForm from "./ManualEmailForm";
-import EmailForm from "./EmailForm";
 import ThankYou from "./ThankYou";
-import { Link, animateScroll as scroll } from "react-scroll";
+import { animateScroll as scroll } from "react-scroll";
 import { fetchRepresentatives } from "../assets/petitions/fetchRepresentatives";
 import { fetchLeads } from "../assets/petitions/fetchLeads";
 import LoadingMainForm from "./LoadingMainForm";

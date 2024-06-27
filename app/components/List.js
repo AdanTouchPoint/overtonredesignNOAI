@@ -28,9 +28,9 @@ const List = ({
     setIsMouseOver(false);
   };
   const buttonText = isMouseOver ? mps.phone : "Call";
-  const generateTweet = (completion) => {
-    if (completion !== "") {
-      const encoder = urlEncode(completion.replace(/['"]+/g, ""));
+  const generateTweet = () => {
+    if (tweet !== "") {
+      const encoder = urlEncode(tweet.replace(/['"]+/g, ""));
       const tweetText = `.${mps.twitter} ${encoder}`;
       window.open(`https://twitter.com/intent/tweet?text=${tweetText}`);
       return;
