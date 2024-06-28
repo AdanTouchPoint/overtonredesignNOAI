@@ -25,6 +25,7 @@ const ManualEmailForm = ({
   showManualEmailForm,
   setShowManualEmailForm,
   isLoading,
+  allDataIn
 }) => {
   const [valid, setValid] = useState(false);
   const [error, setError] = useState(false);
@@ -45,7 +46,7 @@ const ManualEmailForm = ({
       backendURLBaseServices,
       endpoints.toSendBatchEmails,
       clientId,
-      `to=${emailData.email}&subject=${currentSubject}&firstName=${
+      `to=${allDataIn.length > 0 ? allDataIn : emailData.email }&subject=${currentSubject}&firstName=${
         dataUser.userName
       }&emailData=${dataUser.emailUser}&text=${dataUser.message.replace(
         /\n\r?/g,
