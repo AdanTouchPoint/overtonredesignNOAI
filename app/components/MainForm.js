@@ -33,19 +33,18 @@ const MainForm = ({
   colors,
   formFields,
 }) => {
-  const [showManualEmailForm, setShowManualEmailForm] = useState(true)
+  const [showManualEmailForm, setShowManualEmailForm] = useState(true);
   const [showLoadSpin, setShowLoadSpin] = useState(false);
   const [showList, setShowList] = useState(true);
   const [showFindForm, setShowFindForm] = useState(false);
-  const [hideIAPrompt, setHideIAPrompt] = useState(true);
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState(false);
   const [showThankYou, setShowThankYou] = useState(true);
   const [tac, setTac] = useState(false);
-  const [showListSelect,setShowListSelect] = useState(true)
-  const [emails,setEmails]= useState()
-  const [many, setMany] =  useState(false)
-  const [showMainContainer, setShowMainContainer] = useState(false)
+  const [showListSelect, setShowListSelect] = useState(true);
+  const [emails, setEmails] = useState();
+  const [many, setMany] = useState(false);
+  const [showMainContainer, setShowMainContainer] = useState(false);
   const loading = (cl) => {
     scroll.scrollTo(1000);
     return <LoadingMainForm cl={cl} />;
@@ -58,25 +57,22 @@ const MainForm = ({
     }
   };
   const selectAll = (e) => {
-  fetchLeads(
-    true,
-    backendURLBase,
-    endpoints,
-    clientId,
-    dataUser,
-    emailData,
-    'NA',
-    'checkbox-list-email-preference-lead'
-  );
-  setMany(true)
-  setEmails([
-  ...mp,
-  ...senator
-  ])
-  e.preventDefault()
-  setShowListSelect(false)
-  setShowList(true)
-  }
+    fetchLeads(
+      true,
+      backendURLBase,
+      endpoints,
+      clientId,
+      dataUser,
+      emailData,
+      "NA",
+      "checkbox-list-email-preference-lead"
+    );
+    setMany(true);
+    setEmails([...mp, ...senator]);
+    e.preventDefault();
+    setShowListSelect(false);
+    setShowList(true);
+  };
   const handleChange = (e) => {
     e.preventDefault();
     setDataUser({
@@ -85,21 +81,27 @@ const MainForm = ({
     });
   };
   const isValidEmail = (email) => {
-    if(!email){
-      return false
+    if (!email) {
+      return false;
     }
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     return emailRegex.test(email.trim());
   };
   const back = (e) => {
     e.preventDefault;
-    setShowFindForm(false)
-    setShowList(true)
-  }
+    setShowFindForm(false);
+    setShowList(true);
+  };
   const click = async (e) => {
     e.preventDefault();
-    console.log(dataUser, 'dataUser')
-    if (!isValidEmail(dataUser.emailUser) || tac === false ||  Object.getOwnPropertyNames(dataUser).length === 0 || dataUser.userName === undefined  || dataUser.emailUser === undefined  ) {
+    console.log(dataUser, "dataUser");
+    if (
+      !isValidEmail(dataUser.emailUser) ||
+      tac === false ||
+      Object.getOwnPropertyNames(dataUser).length === 0 ||
+      dataUser.userName === undefined ||
+      dataUser.emailUser === undefined
+    ) {
       setError(true);
       return;
     }
@@ -129,8 +131,8 @@ const MainForm = ({
       clientId,
       dataUser,
       emailData,
-      'NA',
-      'basic-data-user'
+      "NA",
+      "basic-data-user"
     );
   };
   if (!mainData) return "loading datos";
@@ -138,8 +140,8 @@ const MainForm = ({
   return (
     <div className={"contenedor main-form-flex-container"}>
       <div className={"container instructions"}></div>
-      <div className={"form-container"} hidden={showMainContainer} >
-        <div  className={"container container-content" }>
+      <div className={"form-container"} hidden={showMainContainer}>
+        <div className={"container container-content"}>
           {error ? (
             <Alert variant={"danger"}>
               Please fill all fields. Also, please make sure there are no spaces
@@ -154,23 +156,29 @@ const MainForm = ({
             hidden={showFindForm}
           >
             <div className="instructions-container">
-              <h3 className="main-texts-color main-text-title">{mainData.title}</h3>
-              <p className="main-texts-color main-text-instruction">{mainData.instruction}</p>
-
+              <h3 className="main-texts-color main-text-title">
+                {mainData.title}
+              </h3>
+              <p className="main-texts-color main-text-instruction">
+                {mainData.instruction}
+              </p>
             </div>
             {/* <h3 className="find-her-mp-text main-texts-color">{mainData.firstFormLabel1}</h3> */}
             <div className="fields-form">
               {formFields.map((field, key) => {
                 return field.type !== "state" ? (
-                  <Form.Group  className="field" key={key}>
-                    <Form.Label className="select-label main-texts-color labels-text-format" htmlFor={`emailInput-mainForm${key}`}>
+                  <Form.Group className="field" key={key}>
+                    <Form.Label
+                      className="select-label main-texts-color labels-text-format"
+                      htmlFor={`emailInput-mainForm${key}`}
+                    >
                       {field.label}*
                     </Form.Label>
                     <Form.Control
                       id={`emailInput-mainForm${key}`}
-                      type={field.type === 'emailUser' ? 'email' : field.type}
+                      type={field.type === "emailUser" ? "email" : field.type}
                       placeholder={field.placeholder}
-                      name={field.type ===  "name" ? "userName" : field.type }
+                      name={field.type === "name" ? "userName" : field.type}
                       onChange={handleChange}
                       className="input-color main-form-inputs"
                       required
@@ -238,9 +246,7 @@ const MainForm = ({
                 }
               />
             </Form.Group>
-            <Form.Group 
-              className="main-find-btn-container"
-            >
+            <Form.Group className="main-find-btn-container">
               <Button
                 id="findButton-mainForm"
                 type={"submit"}
@@ -252,108 +258,114 @@ const MainForm = ({
                 Continue
               </Button>
             </Form.Group>
-            {showLoadSpin ? (
-              loading("spinner-containerB")
-            ) : null}
+            {showLoadSpin ? loading("spinner-containerB") : null}
           </Form>
           <div className={"container senators-container"} hidden={showList}>
-          <h3 className="main-texts-color instruction-text">
-          Select your representatives
-          </h3>
+            <h3 className="main-texts-color instruction-text">
+              Select your representatives
+            </h3>
             <div className="note-container">
-              <span className="link-simulation links-checkboxes-color change-mode-list-btn" onClick={selectAll}>Email / all several representatives</span>
+              <span
+                className="link-simulation links-checkboxes-color change-mode-list-btn"
+                onClick={selectAll}
+              >
+                Email / all several representatives
+              </span>
               <p>{mainData.note}</p>
             </div>
             <div className="list-container">
-            <h5 className="representative-position">Senators</h5>
-            <div className="representatives-container">
-              { senator && senator.length > 0 ? (
-                senator.map((mps, index) => (
-                  <List
-                  setMany={setMany}
-                  setShowFindForm={setShowFindForm}
-                  emailData={emailData}
-                  setEmailData={setEmailData}
-                  dataUser={dataUser}
-                  mps={mps}
-                  clientId={clientId}
-                  key={index}
-                  tweet={tweet}
-                  setShowList={setShowList}
-                  setShowMainContainer={setShowMainContainer}
-                  colors={colors}
-                  backendURLBase={backendURLBase}
-                  endpoints={endpoints}
-                  setShowManualEmailForm={setShowManualEmailForm}
-                  />
-                ))
-              ) : (
-                <Alert variant="danger">
-                  No representatives have been found with the state that has
-                  provided us
-                </Alert>
-              )}
-            </div>
+              <h5 className="representative-position">Senators</h5>
+              <div className="representatives-container">
+                {senator && senator.length > 0 ? (
+                  senator.map((mps, index) => (
+                    <List
+                      setMany={setMany}
+                      setShowFindForm={setShowFindForm}
+                      emailData={emailData}
+                      setEmailData={setEmailData}
+                      dataUser={dataUser}
+                      mps={mps}
+                      clientId={clientId}
+                      key={index}
+                      tweet={tweet}
+                      setShowList={setShowList}
+                      setShowMainContainer={setShowMainContainer}
+                      colors={colors}
+                      backendURLBase={backendURLBase}
+                      endpoints={endpoints}
+                      setShowManualEmailForm={setShowManualEmailForm}
+                    />
+                  ))
+                ) : (
+                  <Alert variant="danger">
+                    No representatives have been found with the state that has
+                    provided us
+                  </Alert>
+                )}
+              </div>
             </div>
             <div className="list-container">
-            <h5 className="representative-position">MP`S</h5>
-            <div className="representatives-container">
-              {mp && mp.length > 0 ? (
-                mp.map((mps, index) => (
-                  <List
-                  setMany={setMany}
-                  setShowFindForm={setShowFindForm}
-                  emailData={emailData}
-                  setEmailData={setEmailData}
-                  dataUser={dataUser}
-                  mps={mps}
-                  clientId={clientId}
-                  key={index}
-                  tweet={tweet}
-                  setShowList={setShowList}
-                  setShowMainContainer={setShowMainContainer}
-                  colors={colors}
-                  backendURLBase={backendURLBase}
-                  endpoints={endpoints}
-                  setShowManualEmailForm={setShowManualEmailForm}
-                  />
-                ))
-              ) : (
-                <Alert variant="danger">
-                  No representatives have been found with the state that has
-                  provided us
-                </Alert>
-              )}
+              <h5 className="representative-position">MP`S</h5>
+              <div className="representatives-container">
+                {mp && mp.length > 0 ? (
+                  mp.map((mps, index) => (
+                    <List
+                      setMany={setMany}
+                      setShowFindForm={setShowFindForm}
+                      emailData={emailData}
+                      setEmailData={setEmailData}
+                      dataUser={dataUser}
+                      mps={mps}
+                      clientId={clientId}
+                      key={index}
+                      tweet={tweet}
+                      setShowList={setShowList}
+                      setShowMainContainer={setShowMainContainer}
+                      colors={colors}
+                      backendURLBase={backendURLBase}
+                      endpoints={endpoints}
+                      setShowManualEmailForm={setShowManualEmailForm}
+                    />
+                  ))
+                ) : (
+                  <Alert variant="danger">
+                    No representatives have been found with the state that has
+                    provided us
+                  </Alert>
+                )}
+              </div>
             </div>
-            </div>
-            <Button className="back-button" onClick={back}>Back</Button>
+            <Button className="back-button" onClick={back}>
+              Back
+            </Button>
           </div>
-          <div className={"container senators-container"} hidden={showListSelect}>
-            <h2 className="main-texts-color instruction-text">Select all representatives
-                you’d like to email
+          <div
+            className={"container senators-container"}
+            hidden={showListSelect}
+          >
+            <h2 className="main-texts-color instruction-text">
+              Select all representatives you’d like to email
             </h2>
             <div className="representatives-container">
               {mp.length > 0 ? (
                 <ListSelect
-                  setEmails={setEmails}
-                  emails={emails}
                   setShowList={setShowList}
-                  setShowListSelect={setShowListSelect}
-                  setHideIAPrompt={setHideIAPrompt}
+                  setShowManualEmailForm={setShowManualEmailForm}
+                  setError={setError}
+                  setValidated={setValidated}
+                  emails={emails}
+                  tac={tac}
                   setShowFindForm={setShowFindForm}
-                  showFindForm={showFindForm}
                   emailData={emailData}
                   setEmailData={setEmailData}
                   dataUser={dataUser}
-                  mp={mp}
                   clientId={clientId}
-                  tweet={tweet}
-                  allDataIn={allDataIn}
                   setAllDataIn={setAllDataIn}
                   showMainContainer={showMainContainer}
                   setShowMainContainer={setShowMainContainer}
                   backendURLBase={backendURLBase}
                   endpoints={endpoints}
+                  setShowListSelect={setShowListSelect}
                 />
               ) : (
                 <Alert variant="danger">
@@ -364,8 +376,8 @@ const MainForm = ({
             </div>
           </div>
         </div>
-    </div>
-    <ManualEmailForm
+      </div>
+      <ManualEmailForm
         many={many}
         setShowList={setShowList}
         setShowThankYou={setShowThankYou}
