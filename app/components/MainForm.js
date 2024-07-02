@@ -42,7 +42,7 @@ const MainForm = ({
   const [showThankYou, setShowThankYou] = useState(true);
   const [tac, setTac] = useState(false);
   const [showListSelect, setShowListSelect] = useState(true);
-  const [emails, setEmails] = useState();
+  const [emails, setEmails] = useState([]);
   const [many, setMany] = useState(false);
   const [showMainContainer, setShowMainContainer] = useState(false);
   const loading = (cl) => {
